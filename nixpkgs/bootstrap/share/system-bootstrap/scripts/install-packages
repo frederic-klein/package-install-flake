@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+echo "configure git"
+git config --global user.name "Frederic K."
+git config --global user.email "frederic-klein@users.noreply.github.com"
+
 echo "install joplin-desktop"
 wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash
 
@@ -11,12 +15,24 @@ else
     echo "Flatpak not found. Please install Flatpak to install Microsoft Edge."
 fi
 
+echo "recreating fzf shell integration"
+echo "eval \"$(fzf --bash)\"" > ~/.fzf_bash_integration
+
+echo "ensure .fzf_bash_integration is sourced in .bashrc"
+if ! grep -Fxq "source ~/.fzf_bash_integration" ~/.bashrc; then
+    echo "source ~/.fzf_bash_integration" >> ~/.bashrc
+    echo "Added 'source ~/.fzf_bash_integration' to ~/.bashrc"
+else
+    echo "'source ~/.fzf_bash_integration' already present in ~/.bashrc"
+fi
+
 echo "install Microsoft Teams PWA in Edge"
 echo "To install Teams PWA, launch Edge and visit https://teams.microsoft.com, then install as app from Edge menu."
 
 echo "install VS Code (deb)"
 wget -O /tmp/vscode-latest.deb 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64'
-sudo apt install -y ./tmp/vscode-latest.deb
+cd /tmp
+sudo apt install -y ./vscode-latest.deb
 
 echo "install Claude Code extension for VS Code"
 if command -v code >/dev/null 2>&1; then
