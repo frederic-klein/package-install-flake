@@ -14,6 +14,7 @@ Available Commands:
 
 Flags:
   -h, --help     shows this help message
+  -v, --version  shows the version of system-bootstrap
 USAGE
     }
 
@@ -21,6 +22,10 @@ USAGE
         case "$1" in
             -h | --help )
                 usage
+                return
+                ;;
+            -v | --version )
+                echo "system-bootstrap version 1.0.1"
                 return
                 ;;
             -- )
