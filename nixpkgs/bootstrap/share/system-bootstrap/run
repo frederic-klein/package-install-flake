@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -e
+
+package_path="$(cd "$(dirname "$0")" && pwd)"
+
+bash "$package_path/scripts/install-packages"
+bash "$package_path/scripts/install-chrome"
+bash "$package_path/scripts/remap-caplock"
+bash "$package_path/scripts/setup-dotfiles"

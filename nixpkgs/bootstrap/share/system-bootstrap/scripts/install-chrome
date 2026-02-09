@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v curl >/dev/null 2>&1; then
+  sudo apt-get update -y
+  sudo apt-get install -y curl
+fi
+
+# 2. Add Google’s signing key (if not already present)
+KEYRING_PATH="/usr/share/keyrings/google-chrome.gpg"
+if [ ! -f "$KEYRING_PATH" ]; then
+  echo "Adding Google Chrome APT GPG key..."
+  curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o "$KEYRING_PATH"
+else
+  echo "Google Chrome APT GPG key already exists: $KEYRING_PATH"
+fi
+
+# 3. Add the Chrome APT repository (if not already present)
+SOURCE_LIST="/etc/apt/sources.list.d/google-chrome.list"
+REPO_LINE="deb [arch=amd64 signed-by=${KEYRING_PATH}] http://dl.google.com/linux/chrome/deb/ stable main"
+
+if [ -f "$SOURCE_LIST" ] && grep -Fq "$REPO_LINE" "$SOURCE_LIST"; then
+  echo "Google Chrome APT repository already configured."
+else
+  echo "Configuring Google Chrome APT repository..."
+  echo "$REPO_LINE" | sudo tee "$SOURCE_LIST" >/dev/null
+fi
+
+# 4. Update APT cache (only if needed)
+echo "Updating package lists..."
+sudo apt-get update -y
+
+# 5. Install Google Chrome (idempotent: apt-get install is safe to re-run)
+if dpkg -s google-chrome-stable >/dev/null 2>&1; then
+  echo "google-chrome-stable is already installed."
+else
+  echo "Installing google-chrome-stable..."
+  sudo apt-get install -y google-chrome-stable
+fi
+
+echo "Done."
