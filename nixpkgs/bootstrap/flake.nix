@@ -5,7 +5,6 @@
 
   outputs = { self, nixpkgs }:
     let
-      version = "1.0.0";
       systems = [ "x86_64-linux" "aarch64-linux" ];
       forAllSystems = f:
         nixpkgs.lib.genAttrs systems (system:
@@ -15,7 +14,6 @@
           }
         );
     in {
-      inherit version;
       
       packages = forAllSystems ({ pkgs, system }: {
         system-bootstrap = pkgs.callPackage ./default.nix {};
