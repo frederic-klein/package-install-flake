@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-echo "configure git"
-git config --global user.name "Frederic K."
-git config --global user.email "frederic-klein@users.noreply.github.com"
-
 echo "install joplin-desktop"
 wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash
 
