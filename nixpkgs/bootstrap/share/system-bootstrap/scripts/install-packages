@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-echo "configure git"
-git config --global user.name "Frederic K."
-git config --global user.email "frederic-klein@users.noreply.github.com"
-
 echo "install joplin-desktop"
 wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash
 
@@ -13,17 +9,6 @@ if command -v flatpak >/dev/null 2>&1; then
     flatpak install -y flathub com.microsoft.Edge
 else
     echo "Flatpak not found. Please install Flatpak to install Microsoft Edge."
-fi
-
-echo "recreating fzf shell integration"
-echo "eval \"$(fzf --bash)\"" > ~/.fzf_bash_integration
-
-echo "ensure .fzf_bash_integration is sourced in .bashrc"
-if ! grep -Fxq "source ~/.fzf_bash_integration" ~/.bashrc; then
-    echo "source ~/.fzf_bash_integration" >> ~/.bashrc
-    echo "Added 'source ~/.fzf_bash_integration' to ~/.bashrc"
-else
-    echo "'source ~/.fzf_bash_integration' already present in ~/.bashrc"
 fi
 
 echo "install Microsoft Teams PWA in Edge"
